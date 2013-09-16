@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+
+  "name": "Nice Meaning",
+  "description": "This extension demonstrates a browser action with kittens.",
+  "version": "1.0",
+
+  "permissions": [ "tabs", "http://*.google.com/" ],
+  
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  
+ "content_scripts": [ {
+  "js": [ "jquery-2.0.3.min.js", "content.js", "tooltip.js" ],
+  "matches": [ "http://*/*", "https://*/*" ]
+} ],
+
+ "web_accessible_resources": [ "jquery-2.0.3.min.map" ]
+}
