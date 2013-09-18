@@ -7,18 +7,23 @@ $(document).ready(function() {
 			case 110:   // n letter
 			case 78:    // N letter
 				if(text){
-					getTranslation(text, function(translatedData){
-						// alert(translatedData.translations[0].translation);
+					getTranslation(text, 12, function(translatedData){
 						 tooltip.show(translatedData["text"]);
 					});
-					
-					// alert("my word12: "+ text);           
+				}
+			break; 
+			case 109:   // m letter
+			case 77:    // M letter
+				if(text){
+					getTranslation(text, 21, function(translatedData){
+						 tooltip.show(translatedData["text"]);
+					});
 				}
 			break; 
 		}
 	};
 	
-	function getTranslation(word, callback) {
+	function getTranslation(word, langOption, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(data) {
 		
@@ -31,12 +36,30 @@ $(document).ready(function() {
 			}
 		}
 	}
-	// Note that any URL fetched here must be matched by a permission in
-	// the manifest.json file!
-	// var url = 'http://api.seslisozluk.com/?key=1234567890abcdef&query='+ encodeURIComponent(word) +'&lang_from=en&lang_to=tr';
-	 var url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20130916T145020Z.643435665c8261bd.8ceaf0d11d4b6392293327da6b5e2fb797989aa8&lang=en-tr&text='+ encodeURIComponent(word);
-	xhr.open('GET', url, true);
-	xhr.send();
+	
+	var lang1;
+	chrome.extension.sendMessage( { method: "getLocalStorage", key: "lang1" }, function(response) {
+	lang1 =  response.data;
+	
+	var lang2;
+	chrome.extension.sendMessage( { method: "getLocalStorage", key: "lang2" }, function(response) {
+		lang2 =  response.data;
+		
+		var langDirection;
+		switch(langOption){
+			case 12:
+				langDirection = lang1 + "-" + lang2;
+				break;
+			case 21:
+				langDirection = lang2 + "-" + lang1;
+				break;
+		}
+		
+		var url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20130916T145020Z.643435665c8261bd.8ceaf0d11d4b6392293327da6b5e2fb797989aa8&lang='+langDirection+'&text='+ encodeURIComponent(word);
+		xhr.open('GET', url, true);
+		xhr.send();
+		});
+	});
 };
 	
 	function onClicked(e){

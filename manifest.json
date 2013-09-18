@@ -1,21 +1,24 @@
 {
   "manifest_version": 2,
-
   "name": "Nice Meaning",
-  "description": "This extension demonstrates a browser action with kittens.",
+  "description": "Hello Kitty",
   "version": "1.0",
-
-  "permissions": [ "tabs", "http://*.google.com/" ],
+  
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [ "tabs", "http://*.google.com/", "background" ],
   
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
-  },
-  
- "content_scripts": [ {
-  "js": [ "jquery-2.0.3.min.js", "content.js", "tooltip.js" ],
+  },  
+ "content_scripts": [{
+  "js": [ "jquery-2.0.3.min.js", "content.js", "tooltip.model.js" ],
   "matches": [ "http://*/*", "https://*/*" ]
-} ],
+  }],
 
- "web_accessible_resources": [ "jquery-2.0.3.min.map" ]
+ "web_accessible_resources": [ "jquery-2.0.3.min.map" ],
+ 
+ "options_page": "options.html"
 }
