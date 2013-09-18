@@ -7,11 +7,11 @@ var checkOptions = function(){
 	}
 };
 
-chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.extension.onMessage.addListener(function(request, sender, responseCallback) {
     if(request.method === "getLocalStorage"){
-		sendResponse({ data: localStorage[request.key] });
+		responseCallback({ data: localStorage[request.key] });
 	} else {
-		sendResponse({ data: "Not implemented method." });
+		responseCallback({ data: "Not implemented method." });
 	}
 });
 

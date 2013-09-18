@@ -1,11 +1,16 @@
-	var lang1;
-	chrome.extension.sendMessage( { method: "getLocalStorage", key: "lang1" }, function(response) {
-		lang1 =  response.data;
+$(document).ready(function() {
+	$("#translate").click(function(){
+		var $word = $("#word");
+		var selection = window.getSelection();
+		$word.val(selection);
 	});
-	console.log(lang1);
 	
-	var lang2;
-	chrome.extension.sendMessage( { method: "getLocalStorage", key: "lang2" }, function(response) {
-		lang2 =  response.data;
+	function onSelectedText(response){
+		alert(encodeURIComponent(response.selectedText));
+	};
+
+	chrome.tabs.getCurrent(null, function(tab) {
+		chrome.tabs.sendRequest(tab.id, {action: "getSelectedText"}, function(response){
+		});
 	});
-	console.log(lang2);
+});

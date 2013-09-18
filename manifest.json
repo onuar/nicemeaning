@@ -14,7 +14,7 @@
     "default_popup": "popup.html"
   },  
  "content_scripts": [{
-  "js": [ "jquery-2.0.3.min.js", "content.js", "tooltip.model.js" ],
+  "js": [ "jquery-2.0.3.min.js", "content.js", "tooltip.model.js", "ajax.get.js" ],
   "matches": [ "http://*/*", "https://*/*" ]
   }],
 

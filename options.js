@@ -5,7 +5,7 @@ $(document).ready(function() {
 		var $cmb1 = $("#cmb1");
 		var $cmb2 = $("#cmb2");
 		
-		$.getJSON('/languages.json', function(data){
+		ajaxCall.callGetJson("/languages.json", function(data){
 			  $.each(data.langs,function(key,val){
 				var $option = $(stringFormat("<option value='{0}'>{1} ({2})</option>",key,val,key));
 				
@@ -29,6 +29,7 @@ $(document).ready(function() {
     };
 	
 	$("#btnSave").click(function(){
+		//todo: translation direction'u languages.json'dan kontrol et.
 		var $cmb1 = $("#cmb1");
 		var $cmb2 = $("#cmb2");
 		
