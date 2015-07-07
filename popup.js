@@ -1,10 +1,14 @@
 $(document).ready(function() {
 	$("#translate").click(function(){
 		var $word = $("#word");
-		var selection = window.getSelection();
-		$word.val(selection);
+		var text = $word.val();
+		if(text){
+			translater.get(text, 12, function(translatedData){
+				$word.val(translatedData["text"]);
+			});
+		}
 	});
-	
+
 	function onSelectedText(response){
 		alert(encodeURIComponent(response.selectedText));
 	};
