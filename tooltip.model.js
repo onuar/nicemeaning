@@ -38,6 +38,7 @@
 			hide: function(){
 				if($div){
 					$div.fadeOut("fast");
+					$div.remove();
 					$div = null;
 				}
 			}
