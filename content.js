@@ -31,7 +31,7 @@ $(document).ready(function() {
 			if (request.action === "getSelectedText") {
 				responseCallback({selectedText: window.getSelection().toString()});
 			} else {
-				responseCallback({}});
+				responseCallback({});
 			}
 		});
 });
