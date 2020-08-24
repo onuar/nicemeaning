@@ -9,8 +9,7 @@ $(document).ready(function () {
 				if (text) {
 					chrome.runtime.sendMessage({ method: "translate", word: text, langDirection: 12 },
 						function (response) {
-							console.log(JSON.stringify(response));
-							// tooltip.show(response);
+							tooltip.show(JSON.stringify(response.response.translations[0]['translation']));
 						});
 				}
 				break;
@@ -19,8 +18,7 @@ $(document).ready(function () {
 				if (text) {
 					chrome.runtime.sendMessage({ method: "translate", word: text, langDirection: 21 },
 						function (response) {
-							console.log(JSON.stringify(response));
-							// tooltip.show(response);
+							tooltip.show(JSON.stringify(response.response.translations[0]['translation']));
 						});
 				}
 				break;
