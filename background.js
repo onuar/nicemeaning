@@ -7,7 +7,9 @@ var checkOptionsAndLoadIfNotExist = function () {
 	}
 }();
 
-chrome.extension.onMessage.addListener(function (request, sender, responseCallback, errorCallback) {
+chrome.extension.onMessage.addListener(function (request, sender, responseCallback) {
+	console.log("background");
+
 	if (request.method === "translate") {
 		var langDirection = request.langDirection;
 		var word = request.word;
@@ -16,21 +18,28 @@ chrome.extension.onMessage.addListener(function (request, sender, responseCallba
 
 		switch (langDirection) {
 			case 12:
-				langOption = localStorage["lang1"] + "-" + localStorage["lang2"];
+				langOption = "en-tr";
 				break;
 			case 21:
-				langOption = localStorage["lang2"] + "-" + localStorage["lang1"];
+				langOption = "tr-en";
 				break;
 		}
+		let headers = new Headers();
 
-		var url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20130916T145020Z.643435665c8261bd.8ceaf0d11d4b6392293327da6b5e2fb797989aa8&lang=' + langOption + '&text=' + encodeURIComponent(word);
-		fetch(url)
+		headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + password));
+		headers.set('Content-Type', 'application/json');
+
+		// + encodeURIComponent(word);
+		var url = 'https://api.eu-gb.language-translator.watson.cloud.ibm.com/instances/ba63b938-37ad-4a5a-b1d3-95b627c7fab2/v3/translate?version=2018-05-01';
+		fetch(url, {
+			method: 'POST',
+			headers: headers,
+			body: '{"text": ["As far as I understand"], "model_id":"en-tr"}'
+		})
 			.then(response => response.json())
 			.then(text => responseCallback({ text }))
-			.catch(error => errorCallback({ error: error }));
+			.catch(error => responseCallback({ error }));
 		return true;
 	}
-	else {
-		responseCallback({ data: "Not implemented method." });
-	}
+	return true;
 });
