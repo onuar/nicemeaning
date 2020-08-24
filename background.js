@@ -1,13 +1,4 @@
-var checkOptionsAndLoadIfNotExist = function () {
-	if (localStorage["lang1"] == null) {
-		localStorage["lang1"] = "en";
-	}
-	if (localStorage["lang2"] == null) {
-		localStorage["lang2"] = "tr";
-	}
-}();
-
-chrome.extension.onMessage.addListener(function (request, sender, responseCallback, errorCallback) {
+chrome.extension.onMessage.addListener(function (request, sender, responseCallback) {
 	if (request.method === "translate") {
 		var langDirection = request.langDirection;
 		var word = request.word;
@@ -16,21 +7,34 @@ chrome.extension.onMessage.addListener(function (request, sender, responseCallba
 
 		switch (langDirection) {
 			case 12:
-				langOption = localStorage["lang1"] + "-" + localStorage["lang2"];
+				langOption = "en-tr";
 				break;
 			case 21:
-				langOption = localStorage["lang2"] + "-" + localStorage["lang1"];
+				langOption = "tr-en";
 				break;
 		}
+		let headers = new Headers();
+		let username = 'apikey';
+		let password = 'IlJ7G4k_vM90ZzEGKce8ObgeEno_UBAocvWYHZ1KDAQn';
 
-		var url = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20130916T145020Z.643435665c8261bd.8ceaf0d11d4b6392293327da6b5e2fb797989aa8&lang=' + langOption + '&text=' + encodeURIComponent(word);
-		fetch(url)
+		headers.set('Authorization', 'Basic ' + btoa(username + ":" + password));
+		headers.set('Content-Type', 'application/json');
+
+		let paramBody = {
+			text: word,
+			model_id: 'en-tr'
+		};
+
+		var url = 'https://api.eu-gb.language-translator.watson.cloud.ibm.com/instances/ba63b938-37ad-4a5a-b1d3-95b627c7fab2/v3/translate?version=2018-05-01';
+		fetch(url, {
+			method: 'POST',
+			headers: headers,
+			body: JSON.stringify(paramBody)
+		})
 			.then(response => response.json())
-			.then(text => responseCallback({ text }))
-			.catch(error => errorCallback({ error: error }));
+			.then(response => responseCallback({ response }))
+			.catch(error => responseCallback({ error }));
 		return true;
 	}
-	else {
-		responseCallback({ data: "Not implemented method." });
-	}
+	return true;
 });
